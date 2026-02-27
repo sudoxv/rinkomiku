@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id" class="<%= theme %>">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title><%= title %></title>
+    
+    <!-- TailwindCSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <!-- Theme script -->
+    <script src="/js/theme.js" defer></script>
+    
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+        
+        /* Dark mode scrollbar */
+        .dark ::-webkit-scrollbar-track {
+            background: #1f2937;
+        }
+        
+        .dark ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+        }
+        
+        /* Loading animation */
+        .loading {
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+    <nav class="bg-white dark:bg-gray-800 shadow-lg sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="/" class="flex items-center space-x-2">
+                    <i class="fa-solid fa-book-open text-2xl text-blue-600 dark:text-blue-400"></i>
+                    <span class="font-bold text-xl text-gray-800 dark:text-white">Rinkomiku</span>
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="/" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition <%= path === '/' ? 'text-blue-600 dark:text-blue-400 font-semibold' : '' %>">
+                        <i class="fa-solid fa-home mr-1"></i> Beranda
+                    </a>
+                    <a href="/favorites" class="text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition <%= path === '/favorites' ? 'text-blue-600 dark:text-blue-400 font-semibold' : '' %>">
+                        <i class="fa-solid fa-heart mr-1"></i> Favorit
+                    </a>
+                </div>
+                
+                <!-- Search Bar -->
+                <div class="flex-1 max-w-xl mx-4 hidden md:block">
+                    <form action="/search" method="GET" class="relative">
+                        <input type="text" 
+                               name="q" 
+                               placeholder="Cari manga..." 
+                               class="w-full px-4 py-2 pl-10 pr-12 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition"
+                               value="<%= typeof query !== 'undefined' ? query : '' %>">
+                        <i class="fa-solid fa-search absolute left-3 top-3 text-gray-400 dark:text-gray-500"></i>
+                        <button type="submit" class="absolute right-2 top-2 px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm">
+                            Cari
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Right Section -->
+                <div class="flex items-center space-x-3">
+                    <!-- Theme Toggle -->
+                    <button id="themeToggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition" aria-label="Toggle theme">
+                        <i class="fa-solid fa-sun text-yellow-500 dark:hidden"></i>
+                        <i class="fa-solid fa-moon text-gray-300 hidden dark:inline-block"></i>
+                    </button>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button id="mobileMenuBtn" class="md:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Search -->
+            <div class="md:hidden py-3 border-t border-gray-200 dark:border-gray-700">
+                <form action="/search" method="GET" class="relative">
+                    <input type="text" 
+                           name="q" 
+                           placeholder="Cari manga..." 
+                           class="w-full px-4 py-2 pl-10 pr-12 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 transition"
+                           value="<%= typeof query !== 'undefined' ? query : '' %>">
+                    <i class="fa-solid fa-search absolute left-3 top-3 text-gray-400 dark:text-gray-500"></i>
+                    <button type="submit" class="absolute right-2 top-2 px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition text-sm">
+                        Cari
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Mobile Navigation Menu -->
+            <div id="mobileMenu" class="hidden md:hidden py-3 border-t border-gray-200 dark:border-gray-700">
+                <a href="/" class="block py-2 px-4 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition <%= path === '/' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : '' %>">
+                    <i class="fa-solid fa-home mr-2"></i> Beranda
+                </a>
+                <a href="/favorites" class="block py-2 px-4 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded transition <%= path === '/favorites' ? 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400' : '' %>">
+                    <i class="fa-solid fa-heart mr-2"></i> Favorit
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    <main class="container mx-auto px-4 py-6">

@@ -1,0 +1,45 @@
+<%- include('partials/header') %>
+
+<div class="mb-8">
+    <h1 class="text-2xl font-bold mb-4">Hasil Pencarian: "<%= query %>"</h1>
+    
+    <% if (error) { %>
+    <div class="bg-yellow-100 dark:bg-yellow-900/30 border border-yellow-400 dark:border-yellow-800 text-yellow-700 dark:text-yellow-400 px-4 py-3 rounded-lg">
+        <i class="fa-solid fa-exclamation-triangle mr-2"></i>
+        <%= error %>
+    </div>
+    <% } %>
+    
+    <% if (results.length > 0) { %>
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <% results.forEach(manga => { %>
+        <a href="/detail?url=<%= encodeURIComponent(manga.url) %>" class="group">
+            <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-xl transition transform hover:-translate-y-1">
+                <div class="aspect-[3/4] overflow-hidden">
+                    <% if (manga.image) { %>
+                    <img src="<%= manga.image %>" 
+                         alt="<%= manga.title %>"
+                         class="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                         loading="lazy">
+                    <% } else { %>
+                    <div class="w-full h-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center">
+                        <i class="fa-solid fa-image text-4xl text-gray-400"></i>
+                    </div>
+                    <% } %>
+                </div>
+                <div class="p-3">
+                    <h3 class="font-semibold text-sm mb-1 line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
+                        <%= manga.title %>
+                    </h3>
+                    <span class="text-xs px-2 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full">
+                        <%= manga.type %>
+                    </span>
+                </div>
+            </div>
+        </a>
+        <% }) %>
+    </div>
+    <% } %>
+</div>
+
+<%- include('partials/footer') %>

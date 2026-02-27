@@ -1,0 +1,119 @@
+<%- include('partials/header') %>
+
+<% if (manga) { %>
+<!-- Manga Info -->
+<div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8 border border-gray-200 dark:border-gray-700">
+    <div class="flex flex-col md:flex-row gap-6">
+        <!-- Cover -->
+        <div class="md:w-64 flex-shrink-0">
+            <div class="aspect-[3/4] rounded-lg overflow-hidden shadow-lg">
+                <% if (manga.cover) { %>
+                <img src="<%= manga.cover %>" 
+                     alt="<%= manga.title %>"
+                     class="w-full h-full object-cover">
+                <% } else { %>
+                <div class="w-full h-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center">
+                    <i class="fa-solid fa-image text-6xl text-gray-400"></i>
+                </div>
+                <% } %>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="mt-4 space-y-2">
+                <button onclick="addToFavorites('<%= manga.title %>', '<%= manga.cover %>', '<%= manga.url %>')" 
+                        class="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center justify-center">
+                    <i class="fa-regular fa-heart mr-2"></i>
+                    Tambah ke Favorit
+                </button>
+            </div>
+        </div>
+        
+        <!-- Info -->
+        <div class="flex-1">
+            <h1 class="text-2xl md:text-3xl font-bold mb-4"><%= manga.title %></h1>
+            
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <span class="text-gray-500 dark:text-gray-400">Pengarang:</span>
+                    <span class="ml-2 font-medium"><%= manga.author %></span>
+                </div>
+                <div>
+                    <span class="text-gray-500 dark:text-gray-400">Status:</span>
+                    <span class="ml-2 font-medium"><%= manga.status %></span>
+                </div>
+            </div>
+            
+            <!-- Genres -->
+            <div class="mb-4">
+                <span class="text-gray-500 dark:text-gray-400 block mb-2">Genre:</span>
+                <div class="flex flex-wrap gap-2">
+                    <% manga.genres.forEach(genre => { %>
+                    <span class="px-3 py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-full text-sm">
+                        <%= genre %>
+                    </span>
+                    <% }) %>
+                </div>
+            </div>
+            
+            <!-- Synopsis -->
+            <div class="mb-4">
+                <span class="text-gray-500 dark:text-gray-400 block mb-2">Sinopsis:</span>
+                <p class="text-gray-700 dark:text-gray-300 leading-relaxed"><%= manga.synopsis %></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chapters -->
+<div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+    <h2 class="text-xl font-bold mb-4 flex items-center">
+        <i class="fa-solid fa-list mr-2 text-blue-600 dark:text-blue-400"></i>
+        Daftar Chapter (<%= manga.totalChapters %>)
+    </h2>
+    
+    <div class="space-y-2 max-h-96 overflow-y-auto pr-2">
+        <% manga.chapters.forEach(chapter => { %>
+        <a href="/chapter?url=<%= encodeURIComponent(chapter.url) %>" 
+           class="block p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition border border-gray-200 dark:border-gray-600">
+            <div class="flex justify-between items-center">
+                <span class="font-medium"><%= chapter.title %></span>
+                <span class="text-sm text-gray-500 dark:text-gray-400">
+                    <i class="fa-regular fa-calendar mr-1"></i>
+                    <%= chapter.date %>
+                </span>
+            </div>
+        </a>
+        <% }) %>
+    </div>
+</div>
+
+<script>
+function addToFavorites(title, cover, url) {
+    const favorites = JSON.parse(localStorage.getItem('rinkomiku_favorites') || '[]');
+    
+    // Check if already exists
+    if (!favorites.some(fav => fav.url === url)) {
+        favorites.push({
+            title,
+            cover,
+            url,
+            addedAt: new Date().toISOString()
+        });
+        
+        localStorage.setItem('rinkomiku_favorites', JSON.stringify(favorites));
+        
+        alert('Berhasil ditambahkan ke favorit!');
+    } else {
+        alert('Manga sudah ada di favorit!');
+    }
+}
+</script>
+
+<% } else { %>
+<div class="bg-yellow-100 dark:bg-yellow-900/30 border border-yellow-400 dark:border-yellow-800 text-yellow-700 dark:text-yellow-400 px-4 py-3 rounded-lg">
+    <i class="fa-solid fa-exclamation-triangle mr-2"></i>
+    <%= error || 'Manga tidak ditemukan' %>
+</div>
+<% } %>
+
+<%- include('partials/footer') %>

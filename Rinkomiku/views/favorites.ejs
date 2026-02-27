@@ -1,0 +1,79 @@
+<%- include('partials/header') %>
+
+<div class="mb-8">
+    <h1 class="text-2xl font-bold mb-6 flex items-center">
+        <i class="fa-solid fa-heart mr-2 text-blue-600 dark:text-blue-400"></i>
+        Manga Favorit Saya
+    </h1>
+    
+    <div id="favoritesContainer" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <!-- Favorites will be loaded here via JavaScript -->
+    </div>
+    
+    <div id="emptyFavorites" class="text-center py-12 hidden">
+        <i class="fa-regular fa-heart text-6xl text-gray-400 mb-4"></i>
+        <p class="text-gray-500 dark:text-gray-400">Belum ada manga favorit</p>
+        <a href="/" class="inline-block mt-4 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+            Cari Manga
+        </a>
+    </div>
+</div>
+
+<script>
+function loadFavorites() {
+    const container = document.getElementById('favoritesContainer');
+    const emptyDiv = document.getElementById('emptyFavorites');
+    const favorites = JSON.parse(localStorage.getItem('rinkomiku_favorites') || '[]');
+    
+    if (favorites.length === 0) {
+        container.innerHTML = '';
+        emptyDiv.classList.remove('hidden');
+        return;
+    }
+    
+    emptyDiv.classList.add('hidden');
+    
+    let html = '';
+    favorites.sort((a, b) => new Date(b.addedAt) - new Date(a.addedAt));
+    
+    favorites.forEach(manga => {
+        html += `
+        <div class="group relative">
+            <a href="/detail?url=${encodeURIComponent(manga.url)}" class="block">
+                <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-xl transition transform hover:-translate-y-1">
+                    <div class="aspect-[3/4] overflow-hidden">
+                        ${manga.cover ? 
+                            `<img src="${manga.cover}" alt="${manga.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" loading="lazy">` :
+                            `<div class="w-full h-full bg-gray-300 dark:bg-gray-700 flex items-center justify-center">
+                                <i class="fa-solid fa-image text-4xl text-gray-400"></i>
+                            </div>`
+                        }
+                    </div>
+                    <div class="p-3">
+                        <h3 class="font-semibold text-sm mb-1 line-clamp-2">${manga.title}</h3>
+                    </div>
+                </div>
+            </a>
+            <button onclick="removeFromFavorites('${manga.url}')" 
+                    class="absolute top-2 right-2 w-8 h-8 bg-red-500 text-white rounded-full hover:bg-red-600 transition flex items-center justify-center opacity-0 group-hover:opacity-100">
+                <i class="fa-solid fa-trash-can text-sm"></i>
+            </button>
+        </div>
+        `;
+    });
+    
+    container.innerHTML = html;
+}
+
+function removeFromFavorites(url) {
+    const favorites = JSON.parse(localStorage.getItem('rinkomiku_favorites') || '[]');
+    const filtered = favorites.filter(fav => fav.url !== url);
+    localStorage.setItem('rinkomiku_favorites', JSON.stringify(filtered));
+    loadFavorites();
+}
+
+// Load favorites on page load
+loadFavorites();
+</script>
+
+<%- include('partials/footer') %>

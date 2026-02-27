@@ -1,0 +1,83 @@
+<%- include('partials/header') %>
+
+<!-- Hero Section -->
+<section class="mb-12">
+    <div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-2xl p-8 md:p-12 text-white">
+        <h1 class="text-3xl md:text-4xl font-bold mb-4">Selamat Datang di Rinkomiku</h1>
+        <p class="text-lg mb-6 opacity-90">Baca manga favoritmu secara gratis. Ribuan koleksi manga tersedia!</p>
+        <form action="/search" method="GET" class="max-w-2xl">
+            <div class="flex flex-col sm:flex-row gap-3">
+                <input type="text" 
+                       name="q" 
+                       placeholder="Cari manga..." 
+                       class="flex-1 px-4 py-3 rounded-lg text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-300">
+                <button type="submit" class="px-6 py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 transition">
+                    <i class="fa-solid fa-search mr-2"></i>Cari
+                </button>
+            </div>
+        </form>
+    </div>
+</section>
+
+<!-- Features -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+        <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4">
+            <i class="fa-solid fa-mobile-screen-button text-2xl text-blue-600 dark:text-blue-400"></i>
+        </div>
+        <h3 class="font-semibold text-lg mb-2">Responsive Design</h3>
+        <p class="text-gray-600 dark:text-gray-400">Baca nyaman di desktop dan mobile</p>
+    </div>
+    
+    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+        <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4">
+            <i class="fa-solid fa-palette text-2xl text-blue-600 dark:text-blue-400"></i>
+        </div>
+        <h3 class="font-semibold text-lg mb-2">Dark/Light Mode</h3>
+        <p class="text-gray-600 dark:text-gray-400">Sesuaikan tema sesuai kenyamanan mata</p>
+    </div>
+    
+    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border border-gray-200 dark:border-gray-700">
+        <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mb-4">
+            <i class="fa-regular fa-bookmark text-2xl text-blue-600 dark:text-blue-400"></i>
+        </div>
+        <h3 class="font-semibold text-lg mb-2">Favorit Lokal</h3>
+        <p class="text-gray-600 dark:text-gray-400">Simpan manga favorit di browser kamu</p>
+    </div>
+</section>
+
+<!-- Recent Manga (Placeholder) -->
+<section>
+    <h2 class="text-2xl font-bold mb-6 flex items-center">
+        <i class="fa-solid fa-clock mr-2 text-blue-600 dark:text-blue-400"></i>
+        Manga Terbaru
+    </h2>
+    
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <% for(let i = 1; i <= 10; i++) { %>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 hover:shadow-xl transition animate-pulse">
+            <div class="aspect-[3/4] bg-gray-300 dark:bg-gray-700"></div>
+            <div class="p-3">
+                <div class="h-4 bg-gray-300 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
+                <div class="h-3 bg-gray-200 dark:bg-gray-600 rounded w-1/2"></div>
+            </div>
+        </div>
+        <% } %>
+    </div>
+    
+    <p class="text-center text-gray-500 dark:text-gray-400 mt-8">
+        <i class="fa-solid fa-search mr-2"></i>
+        Gunakan fitur pencarian untuk menemukan manga
+    </p>
+</section>
+
+<% if (error) { %>
+<div class="fixed bottom-4 right-4 bg-red-100 dark:bg-red-900/30 border border-red-400 dark:border-red-800 text-red-700 dark:text-red-400 px-4 py-3 rounded-lg shadow-lg max-w-md">
+    <div class="flex items-center">
+        <i class="fa-solid fa-circle-exclamation mr-2"></i>
+        <span><%= error %></span>
+    </div>
+</div>
+<% } %>
+
+<%- include('partials/footer') %>
